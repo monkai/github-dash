@@ -57,6 +57,7 @@ The time-filter on the dashboard applies to both view and extends/shortens the w
 
 
 -------- Notes --------
+
 By default, the application.properties file is configured with:
 retrievalJob.daysToLookBack=30
 retrievalJob.delay=3600000
@@ -71,6 +72,7 @@ The 'delay' is a crude mechanism to gently consume the GitHubAPI at a rate-limit
 
 
 ------- Extensions ------
+
 This can be extended almost indefinitely. Main call outs for taking this to something close to production-ready are:
 
 1. Swapping out the basic setup of the Elasticsearch container following the documentation here: https://www.elastic.co/guide/en/cloud/current/ec-prepare-production.html#:~:text=Create%20a%20deployment%20on%20the%20region%20you%20need,or%20add%20your%20own%20custom%20dictionaries%20and%20scripts.
