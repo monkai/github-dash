@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<iframe src="http://localhost:5601/app/dashboards#/list?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-1M,to:now))" height="650" width="1000"></iframe>
+
+<br/>
+<h2>Add additional repositories with the following form:</h2>
+<form th:action="@{/add-repo}" method="post">
+    <label for="repo-name">Repository Name:</label>
+    <input type="text" id="repo-name" name="repoName" placeholder="github-dash"><br><br>
+    <label for="repo-owner">Repository owner:</label>
+    <input type="text" id="repo-owner" name="repoOwner" placeholder="monkai"><br><br>
+    <label for="repo-owner">Branch:</label>
+    <input type="text" id="branch" name="branch" placeholder="master"><br><br>
+    <input type="submit" value="Submit">
+    <p>After submitting a new repository it may take a minute to load up the GitHub information. The new repository entry will appear below when this is finished.</p>
+    <p>To filter the new repository in/out from teh charts please use the Add Filter 'plus-symbol' button top-left and use "repo.keyword" as the field name. The new repo you added will appear as a selectable "Value" once indexed</p>
+</form>
+<br/>
+
+<h2>Repositories currently loaded into Elasticsearch are as follows:</h2>
+<table>
+    <thead>
+    <tr>
+        <th> Repository Owner/Name/Branch</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${repoOwnerNameBranchList}">
+        <td><span th:text="${entry.getOwner()+'/'+entry.getName()+'/'+entry.getBranches()}"> Title </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+
+</html>

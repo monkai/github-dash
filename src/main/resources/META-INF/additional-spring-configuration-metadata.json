@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "retrievalJob.daysToLookBack",
+      "type": "java.lang.String",
+      "description": "Integer number >= 0: Days to look into the past for GitHub commits. Forms the start of a window over which to retrieve GitHub data."
+    },
+    {
+      "name": "retrievalJob.delay",
+      "type": "java.lang.String",
+      "description": "Integer number >=0: Number of millis to wait between GitHub data retrieval jobs."
+    }
+  ] }
