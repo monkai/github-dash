@@ -24,7 +24,7 @@ public class GitHubRetrievalJob {
     @Value("${retrievalJob.daysToLookBack}")
     private Long daysToLookBack;
 
-    // TODO: needs moving out either into ES itself, or some other persistence technology
+    // TODO: this PoC caching solution needs moving out either into ES itself, or some other persistence technology
     private Map<String,RepoOwnerNameBranch> repoOwnerNameBranchLookup = new HashMap<>();
     private Map<String, String> latestDatePerRepo = new HashMap<>();
 

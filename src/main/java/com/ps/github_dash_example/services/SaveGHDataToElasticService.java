@@ -14,7 +14,7 @@ import java.util.Optional;
 public class SaveGHDataToElasticService {
     public static SimpleDateFormat yyyymmddFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final long DELAY_BETWEEN_GITHUB_CALLS = 5000;
-    String untilYYYYMMDD = "2099-01-01"; //TODO: convert to "tomorrow's date"
+    String untilYYYYMMDD = "2099-01-01"; //TODO - investigate if "until" is in fact an optional param, if so, consider omitting altogether
     Integer pageSize = 100;
     String rootNode = "data";
     String acceptValue = "application/vnd.github+json";
@@ -35,10 +35,9 @@ public class SaveGHDataToElasticService {
             String repoOwnerAndName = repoOwner + "/" + repoName;
             var ghDataList = gitHubJsonRetriever.getGHDataList(rootNode, repoOwnerAndName, branch, sinceYYYYMMDD, untilYYYYMMDD, pageSize, acceptValue, page++);
             size = ghDataList.size();
-            String date = null;
             for (GHData ghData : ghDataList) {
                 elasticsearchOperations.save(ghData);
-                date = Optional.of(ghData.getData())
+                String date = Optional.of(ghData.getData())
                         .map(map -> map.get("commit"))
                         .map(Map.class::cast)
                         .map(map -> map.get("author"))

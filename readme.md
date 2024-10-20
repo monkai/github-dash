@@ -96,6 +96,7 @@ This can be extended almost indefinitely. Main call-outs for taking this to some
 6. Performance and load testing to establish a baseline of performance figures.
 7. Moving the scheduled retrieval job into a proper thread pool solution such they each retrieval operation becomes non-blocking and returns a progress bar or similar.
 8. Investigation of GitHub subscription model is likely a good idea - better than periodic polling. A webhook callback endpoint could be built in to receive notifications on GitHub activity on the subscribed repositories.
+9. Secured repositories may will require an APIKEY or similar to integrate. The RestClient call will need updating to include an authorisation header in that case, which will require adding in at the time of adding the repository to teh retrieval job.
 
 
 
