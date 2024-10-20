@@ -4,7 +4,7 @@ In Git Bash please follow these steps to create an Elasticsearch container, upda
 
 1. Start docker desktop
 
-2. In Git bach, run
+2. In Gitbash, run
 
 	curl -fsSL https://elastic.co/start-local | sh
 
@@ -18,41 +18,47 @@ In Git Bash please follow these steps to create an Elasticsearch container, upda
    Password: <PASSWORD, e.g 'AlkaqLOo'>
 
 🔌 Elasticsearch API endpoint: http://localhost:9200
+
 🔑 API key: <API-KEY, e.g NlV1RmpKSUJQSUJDVG10N2N2cmM6VDhxV1Z0V2FTSmFiSmxSRmxadV84Zw==>
 
 
-4. Please username and password from above in your 'application.properties' file in this checkout:
+4. Please copy the username and password from above in your 'application.properties' file in this checkout:
 
 	elasticsearch.user=elastic
+
 	elasticsearch.pwd=<PASSWORD, e.g 'AlkaqLOo'>
 
 
-5. To restore the dashboard as please run the following curl command, having inserted your API-KEY from running the above Curl script, from the 'kibana' folder in the checkout:
+5. To restore the dashboard checked into this repo, please run the following curl command, having inserted the API-KEY referred to above into the Authorization header, from the 'kibana' folder in this checkout:
 
-curl \ -X POST http://localhost:5601/api/saved_objects/_import?createNewCopies=true -H "kbn-xsrf: true" -H "Authorization: ApiKey <INSERT YOUR API KEY HERE>" --form file=@kibana-dashboard.ndjson
+curl \ -X POST http://localhost:5601/api/saved_objects/_import?createNewCopies=true -H "kbn-xsrf: true" -H "Authorization: ApiKey INSERT-YOUR-API-KEY-HERE --form file=@kibana-dashboard.ndjson
 
-6. Prepare the checkedout code for launching with gradle by running gradlew.bat in the root directory.
+6. Prepare the checked-out code for launching with gradle by running gradlew.bat in the root directory.
 
 7. Run the application server using the bootRun gradle task: './gradlew.bat bootRun'
 
 8. In a browser, navigate to 'localhost:8080/dashboard' and select the 'all contributors' dashboard. This should load the data visualisation from the running elasticsearch container. The default (configurable) login details are:
 
 	User: user
+
 	Password: github123
 
-9. Add additional repositories to visualise as you wish. An example is this repository itself:
+9. Add additional GitHub repositories to visualise as you wish. An example is this repository itself:
+
 	Repo name: github-dash
+
 	Repo owner: monkai
+
 	Repo branch: master
 
-10. If you wish to filter the new repo(s) you add in/out, please use the blue "plus" button to add a corresponding 'repo.keyword' filter as directed.
+10. If you wish to filter the new repo(s) you add in/out of the dashboard, please use the blue "plus" button to add a corresponding 'repo.keyword' filter as directed.
 
 
 The dashboard is almost infinitely flexible thanks to Kibana. The initial dashboard view offers, on the left, a stacked vertical bar view of the commits of each user by day. Filtering on a user is possible by selecting their name in the legend. Filtering by repo is possible using the filter buttons along the top of the dashboard.
 
 On the right we have a visualisation of the number of commits by user. Using the repository filters along the top will filter this data to specific repository activity.
 
-The time-filter on the dashboard applies to both view and extends/shortens the window for the data that is visualised.
+The time-filter on the dashboard applies to both views and extends/shortens the window for the data that is visualised.
 
 
 
@@ -60,9 +66,10 @@ The time-filter on the dashboard applies to both view and extends/shortens the w
 
 By default, the application.properties file is configured with:
 retrievalJob.daysToLookBack=30
+
 retrievalJob.delay=3600000
 
-The 'daysToLookBack', in days, sets the period to retrieve GitHub data over. Increase it if you wish to visualise a longer period that the revious month, and use the dashboard time-filter top-right accordingly to extend the filter.
+The 'daysToLookBack', in days, sets the period to retrieve GitHub data over. Increase it if you wish to visualise a longer period that the previous month, and use the dashboard time-filter top-right accordingly to extend the filter.
 
 The 'delay' is a crude mechanism to gently consume the GitHubAPI at a rate-limited speed. The dealy, in millis, is put in between successive GitHub requests.
 
@@ -73,16 +80,22 @@ The 'delay' is a crude mechanism to gently consume the GitHubAPI at a rate-limit
 
 ------- Extensions ------
 
-This can be extended almost indefinitely. Main call outs for taking this to something close to production-ready are:
+This can be extended almost indefinitely. Main call-outs for taking this to something close to production-ready are:
 
-1. Swapping out the basic setup of the Elasticsearch container following the documentation here: https://www.elastic.co/guide/en/cloud/current/ec-prepare-production.html#:~:text=Create%20a%20deployment%20on%20the%20region%20you%20need,or%20add%20your%20own%20custom%20dictionaries%20and%20scripts.
+1. Swapping out the basic setup of the Elasticsearch container following the documentation here: https://www.elastic.co/guide/en/cloud/current/ec-prepare-production.html#:~:text=Create%20a%20deployment%20on%20the%20region%20you%20need,or%20add%20your%20own%20custom%20dictionaries%20and%20scripts. 
+	
+	Note: A proper production analysis would help informa a decision on hosting the elasticsearch in the cloud, perhaps on AWS, versus taking on a hosted solution from Elastic.
 
-2. Investigating the best solution for securing the web frontend based on the business context and expected usage.
+2. Investigating the best solution for securing the web frontend based on the business context and expected usage. Again, production analysis of expected usage would inform the best way to host this: AWS container would be an option with a suitably tailored public/IP whitelisted ingress as requirements dictate.
 
 3. Adding functionality for subsequently removing repositories that are no longer desired. This has not been added at this time due to time-constraints.
 
 4. Pushing the currently "in-memory" caching of the current repositories into Elasticsearch or an alternative data persistence technology. This has not been added at this time due to time-constraints.
 
-5. Additional testing on the classes, to bring the coverage up to a high level of completeness, preferably 100%
+5. Additional testing on the classes, to bring the coverage up to a high level of completeness, preferably 100%.
+6. Performance and load testing to establish a baseline of performance figures.
+7. Moving the scheduled retrieval job into a proper thread pool solution such they each retrieval operation becomes non-blocking and returns a progress bar or similar.
+8. Investigation of GitHub subscription model is likely a good idea - better than periodic polling. A webhook callback endpoint could be built in to receive notifications on GitHub activity on the subscribed repositories.
+
 
 
